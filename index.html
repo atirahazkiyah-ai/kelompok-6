@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulasi Beban Pikiran</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            background-color: #f0f2f5;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Area simulasi jatuh */
+        .container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            height: 100%;
+            border-left: 2px dashed #ccc;
+            border-right: 2px dashed #ccc;
+        }
+
+        /* Kotak beban yang akan bergerak */
+        .kotak-beban {
+            position: absolute;
+            top: 50px; /* Posisi awal di atas */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            background-color: #ffffff;
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: top 0.3s ease-out; /* Animasi pergerakan halus */
+            box-sizing: border-box;
+        }
+
+        h3 {
+            margin-top: 0;
+            color: #333;
+            text-align: center;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+            resize: none;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #aaa;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="ruangSimulasi">
+        <div class="kotak-beban" id="kotak">
+            <h3>Ketikkan Beban Pikiranmu</h3>
+            <textarea id="inputBeban" placeholder="Tumpahkan semua di sini..."></textarea>
+        </div>
+    </div>
+
+    <script>
+        const kotak = document.getElementById('kotak');
+        const inputBeban = document.getElementById('inputBeban');
+        const ruangSimulasi = document.getElementById('ruangSimulasi');
+
+        // Batas atas dan bawah pergerakan
+        const posisiAwal = 50; 
+        
+        inputBeban.addEventListener('input', () => {
+            const jumlahKarakter = inputBeban.value.length;
+            
+            // Hitung sisa ruang vertikal yang tersedia di layar
+            const tinggiKotak = kotak.offsetHeight;
+            const tinggiLayar = ruangSimulasi.offsetHeight;
+            const batasMaksimumTurun = tinggiLayar - tinggiKotak - 20;
+
+            // Faktor pengali (semakin besar angka, semakin cepat kotak turun per karakter)
+            const beratPerKarakter = 1.5; 
+            
+            // Hitung posisi top baru
+            let posisiBaru = posisiAwal + (jumlahKarakter * beratPerKarakter);
+
+            // Batasi agar tidak melewati bagian bawah layar
+            if (posisiBaru > batasMaksimumTurun) {
+                posisiBaru = batasMaksimumTurun;
+            }
+
+            // Terapkan perubahan posisi
+            kotak.style.top = posisiBaru + 'px';
+        });
+    </script>
+
+</body>
+</html>
